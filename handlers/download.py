@@ -49,6 +49,9 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     status = await update.message.reply_text(
         "🔎 Processing URL..."
     )
+    context.chat_data.setdefault("bot_messages", []).append(
+        status.message_id
+    )
 
     temp_dir = None
 
@@ -76,7 +79,7 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open(filename, "rb") as media:
 
             if media_type == "image":
-                await update.message.reply_photo(
+                sent = await update.message.reply_photo(
                     photo=media,
                     caption=f"📷 {title}",
                     read_timeout=60,
@@ -84,9 +87,12 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     connect_timeout=60,
                     pool_timeout=60,
                 )
+                context.chat_data.setdefault("bot_messages", []).append(
+                    sent.message_id
+                )
 
             elif media_type == "video":
-                await update.message.reply_video(
+                sent = await update.message.reply_video(
                     video=media,
                     caption=f"🎬 {title}",
                     read_timeout=60,
@@ -95,15 +101,21 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     pool_timeout=60,
                     supports_streaming=True,
                 )
+                context.chat_data.setdefault("bot_messages", []).append(
+                    sent.message_id
+                )
 
             else:
-                await update.message.reply_document(
+                sent = await update.message.reply_document(
                     document=media,
                     caption=f"📁 {title}",
                     read_timeout=60,
                     write_timeout=300,
                     connect_timeout=60,
                     pool_timeout=60,
+                )
+                context.chat_data.setdefault("bot_messages", []).append(
+                    sent.message_id
                 )
 
         await status.delete()
