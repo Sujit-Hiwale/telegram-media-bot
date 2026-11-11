@@ -6,7 +6,14 @@ from handlers.clear import clear
 from handlers.start import start
 
 def main():
-    app = Application.builder().token(TOKEN).build()
+    app = (
+        Application.builder()
+        .token(TOKEN)
+        .concurrent_updates(4)
+        .connection_pool_size(8)
+        .pool_timeout(60)
+        .build()
+    )
 
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, download)
