@@ -2,10 +2,13 @@ anyio==4.16.0
 beautifulsoup4==4.15.0
 certifi==2026.10.23
 charset-normalizer==3.5.2
+gallery_dl==1.32.19
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
 idna==3.20
+parth-dl==1.2.1
+pillow==13.0.0
 python-dotenv==1.2.4
 python-telegram-bot==22.8
 requests==2.34.2
